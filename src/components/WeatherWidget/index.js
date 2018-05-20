@@ -3,7 +3,7 @@ import React, {PureComponent} from 'react'
 import iconsDictionary from '../../icons.dictionary';
 
 import PlacesAutocomplete from 'react-places-autocomplete';
-import { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
+import { geocodeByAddress, getLatLng } from 'react-places-autocomplete' 
 
 import './style.css';
 
@@ -18,7 +18,7 @@ class WeatherWidget extends PureComponent {
         startDate: null,
         weather: null,
 
-        currentDayNumber: null,
+        currentDayNumber: null, 
         currentDaytimeNumber: null,
 
         daysNumber: 5,
@@ -31,10 +31,10 @@ class WeatherWidget extends PureComponent {
     componentWillMount() {
 
         let appState = {
-            currentDaytimeNumber: Math.floor((new Date()).getHours()/3)
+            currentDaytimeNumber: Math.floor((new Date()).getHours()/3) 
         };
 
-        if(localStorage.getItem('weatherAppTemperatureMode')){
+        if(localStorage.getItem('weatherAppTemperatureMode')){ 
             appState.temperatureMode = localStorage.getItem('weatherAppTemperatureMode');
         }
 
@@ -49,7 +49,7 @@ class WeatherWidget extends PureComponent {
 
     render() {
 
-        const weather = this.state.weather;
+        const weather = this.state.weather; 
 
         const today = weather && weather[this.state.currentDayNumber],
             now = new Date(),
@@ -61,7 +61,7 @@ class WeatherWidget extends PureComponent {
 
         const weatherList = weather && weather
             .map(daily =>
-                <div key = { Math.random().toString(36).substr(2, 9) } className="WW_cell WW_cell__daily">
+                <div key = { Math.random().toString(36).substr(2, 9) } className="WW_cell WW_cell__daily"> 
 
                     <div className="WW_daily-weekday">{daily.weekDay}</div>
 
@@ -80,7 +80,7 @@ class WeatherWidget extends PureComponent {
             </div>
         );
 
-        if(weatherDuringTheDay)weatherDuringTheDay.push(weatherDuringTheDay.shift());
+        if(weatherDuringTheDay)weatherDuringTheDay.push(weatherDuringTheDay.shift()); 
 
         return (
             <div className="WW">
@@ -91,10 +91,10 @@ class WeatherWidget extends PureComponent {
 
                         <div className="WW_cell WW_cell__city">
 
-                            <div className="WW_city-change" onClick={this.citySelectShow.bind(this)}> </div>
+                            <div className="WW_city-change" onClick={this.citySelectShow.bind(this)}> </div> 
 
                             <span className="WW_city-name">
-                            {`${this.state.city}, ${this.state.country}`}
+                            {`${this.state.city}, ${this.state.country}`} 
                         </span>
 
                         </div>
@@ -112,7 +112,7 @@ class WeatherWidget extends PureComponent {
 
                     </div>
 
-                    <div className="WW_row">
+                    <div className="WW_row"> 
                         <div className="WW_cell WW_cell__full">
 
                             <div className="WW_date-string">
@@ -206,10 +206,10 @@ class WeatherWidget extends PureComponent {
 
     // Helpers //
 
-    getDateString = (date) => {
+    getDateString = (date) => { 
 
         const month = ['January','February','March','April','May','June','July','August','September','October','November','December'],
-            week = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            week = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; 
 
         return `${week[date.getDay()]}, ${month[date.getMonth()]} ${this.getNumberWithSuffix(date.getUTCDate())} ${date.getFullYear()}`;
     };
@@ -240,7 +240,7 @@ class WeatherWidget extends PureComponent {
                 (resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject)
             )
         } else {
-            return new Promise(
+            return new Promise( 
                 resolve => resolve({})
             )
         }
@@ -288,7 +288,7 @@ class WeatherWidget extends PureComponent {
                             resolve( newPosition );
 
                         } else {
-                            reject(["address not found", results]);
+                            reject(["address not found", results]); 
                         }
 
                     } else {
@@ -335,7 +335,7 @@ class WeatherWidget extends PureComponent {
                     city = addressArr[0],
                     country = addressArr[addressArr.length - 1];
 
-                localStorage.setItem('weatherAppPosition', JSON.stringify({
+                localStorage.setItem('weatherAppPosition', JSON.stringify({ 
                     ...position,
                     city,
                     country
@@ -376,7 +376,7 @@ class WeatherWidget extends PureComponent {
             )
             .then(
                 position => this.loadWeatherData(position),
-                err => {
+                err => { 
                     console.warn('Geolocation disabled', err);
 
                     this.setState({
@@ -410,11 +410,11 @@ class WeatherWidget extends PureComponent {
 
     };
 
-    requestAppData = (position) => {
+    requestAppData = (position) => { 
 
         new Promise((resolve, reject) => {
 
-            const xhr = new XMLHttpRequest();
+            const xhr = new XMLHttpRequest(); 
 
             // xhr.open('GET', `http://api.openweathermap.org/data/2.5/forecast?q=${city}&APPID=${this.props.apiKeys.openWeatherMaps}`, true);
             xhr.open('GET', `https://api.openweathermap.org/data/2.5/forecast?lat=${position.lat}&lon=${position.lng}&APPID=${this.props.apiKeys.openWeatherMaps}`, true);
@@ -452,7 +452,7 @@ class WeatherWidget extends PureComponent {
         );
     };
 
-    parseAppData = (raw_data) => {
+    parseAppData = (raw_data) => { 
 
         const week = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
             todayWeekDayNumber = (new Date()).getDay();
@@ -460,11 +460,11 @@ class WeatherWidget extends PureComponent {
         const weatherByDays = raw_data.list
 
             // get 20 periods [ [0,1,2], ...etc ]
-            .reduce((periods, item, i) => {
+            .reduce((periods, item, i) => { 
 
                 periods[periods.length-1].push(item);
 
-                if(!(i%2) && i) periods.push([item]);
+                if(!(i%2) && i) periods.push([item]); 
 
                 return periods;
 
@@ -485,11 +485,11 @@ class WeatherWidget extends PureComponent {
             .map((day, dayIndex) => {
 
                 const currentWeekDay = (todayWeekDayNumber + dayIndex)%7;
-                const currentDescription = day[2][0].weather[0].description;
+                const currentDescription = day[2][0].weather[0].description; 
 
-                const dayData = {
+                const dayData = { 
 
-                    weather: {
+                    weather: {512
                         byDaytimes: [0,0,0,0],
                         byHours: []
                     },
@@ -509,14 +509,14 @@ class WeatherWidget extends PureComponent {
 
                         const tempInC = Math.round(threeHours.main.temp - 273.15);
 
-                        if(i !== 2) dayData.weather.byHours.push({
+                        if(i !== 2) dayData.weather.byHours.push({ 
                             temp: tempInC,
                             icon: threeHours.weather[0].icon
                         });
 
                         daytimeTemp += tempInC;
 
-                    }, 0);
+                    }, 0); 
 
                     dayData.weather.byDaytimes[dayTimeIndex] = Math.round(daytimeTemp/3);
 
@@ -528,7 +528,7 @@ class WeatherWidget extends PureComponent {
 
         console.log(weatherByDays);
 
-        return {
+        return { 
 
             weather: weatherByDays,
             startDate: this.getNowDateString(),
